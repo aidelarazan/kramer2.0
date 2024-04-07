@@ -23,7 +23,6 @@ Repository includes: experiment code, data, and analyses notebooks.
 
 ## Folder Structure
  * [data](./data/)
- * [docs](./docs/)
  * [scripts](./scripts/)
     * [analyses](./scripts/analyses/)
     * [experiment](./scripts/experiment/)
