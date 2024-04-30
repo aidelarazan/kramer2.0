@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>kramer2.0_pilotB5_day2</title>
+        <script src="jspsych/jspsych.js"></script>
+        <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-text.js"></script>
+        <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-video-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-html-button-response.js"></script>
+        <script src="jspsych/plugins/jspsych-call-function.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-likert.js"></script>
+        <script src="jspsych/plugins/jspsych-html-slider-response-fix.js"></script>
+        <script src="jspsych/external/instructions.js"></script>
+        <script src="jspsych/external/recall_stim_timed.js"></script>
+        <script src="jspsych/external/event_distance_stim.js"></script>
+        <script src="jspsych/external/event_distance_training.js"></script>
+        <link href="jspsych/css/jspsych.css" rel="stylesheet" type="text/css">
+    </head>
+    <body></body>
+    <script>
+
+// kramer2.0_pilotB5 Day 2 (Retrieval Only)
+// Angelique I. Delarazan 09/25/2021
+
+// set subject ID and version number in the URL
+var subject = jsPsych.data.getURLVariable('subject')
+var version = jsPsych.data.getURLVariable('version')
+
+// initiate correct story recall version
+recall_stim_list = [
+  recall_version1, 
+  recall_version2, 
+  recall_version3, 
+  recall_version4, 
+  recall_version5, 
+  recall_version6, 
+  recall_version7, 
+  recall_version8, 
+  recall_version9, 
+  recall_version10, 
+  recall_version11, 
+  recall_version12, 
+  recall_version13, 
+  recall_version14,
+  recall_version15, 
+  recall_version16, 
+  recall_version17, 
+  recall_version18, 
+  recall_version19, 
+  recall_version20,
+  recall_version21, 
+  recall_version22, 
+  recall_version23, 
+  recall_version24, 
+  recall_version25, 
+  recall_version26,
+  recall_version27, 
+  recall_version28, 
+  recall_version29, 
+  recall_version30, 
+  recall_version31, 
+  recall_version32
+]
+var recall_stim = recall_stim_list[version-1] 
+
+// initiate correct story version
+event_distance_stim_list = [
+  event_distance_version1, 
+  event_distance_version2, 
+  event_distance_version3, 
+  event_distance_version4, 
+  event_distance_version5, 
+  event_distance_version6, 
+  event_distance_version7, 
+  event_distance_version8, 
+  event_distance_version9, 
+  event_distance_version10, 
+  event_distance_version11, 
+  event_distance_version12, 
+  event_distance_version13, 
+  event_distance_version14,
+  event_distance_version15, 
+  event_distance_version16, 
+  event_distance_version17, 
+  event_distance_version18, 
+  event_distance_version19, 
+  event_distance_version20,
+  event_distance_version21, 
+  event_distance_version22, 
+  event_distance_version23, 
+  event_distance_version24, 
+  event_distance_version25, 
+  event_distance_version26,
+  event_distance_version27, 
+  event_distance_version28, 
+  event_distance_version29, 
+  event_distance_version30, 
+  event_distance_version31, 
+  event_distance_version32
+]
+var event_distance_stim = event_distance_stim_list[version-1] 
+
+// experimenter notification
+var notification = {
+  type: "html-keyboard-response",
+  stimulus: notification,
+  choices: [' '],
+  response_ends_trial: true
+};
+
+//  welcome message
+var welcome = {
+  type: "html-keyboard-response",
+  stimulus: welcome_day2,
+  choices: [' '],
+  response_ends_trial: true
+}; 
+
+// recall
+//   recall_instructions
+var recall_instructions = {
+  type: "html-keyboard-response",
+  stimulus: recall_instructions,
+  choices: [' ']
+};
+
+  // sideplots
+var recall_sideplots = {
+  timeline: [{
+    type: 'survey-text',
+    preamble: jsPsych.timelineVariable('recall_stim'),
+    questions: jsPsych.timelineVariable('prompt'),
+    data: {'character':jsPsych.timelineVariable('character'), 'event_1':jsPsych.timelineVariable('event_1'), 'event_2':jsPsych.timelineVariable('event_2'), 'coherence': jsPsych.timelineVariable('coherence'),'lag':jsPsych.timelineVariable('lag'), 'plot': jsPsych.timelineVariable('plot')}}],
+    timeline_variables: recall_stim,
+    button_label:'Continue',
+  on_load: function(){
+    var wait_time = 1 * 6 * 30000; // in milliseconds
+    var start_time = performance.now();
+    document.querySelector('#jspsych-survey-text-next').disabled = true;
+    var interval = setInterval(function(){
+      var time_left = wait_time - (performance.now() - start_time);
+      var minutes = Math.floor(time_left / 1000 / 60);
+      var seconds = Math.floor((time_left - minutes*1000*60)/1000);
+      var seconds_str = seconds.toString().padStart(2,'0');
+      document.querySelector('#clock').innerHTML = minutes + ':' + seconds_str
+      if(time_left <= 0){
+        document.querySelector('#clock').innerHTML = "0:00";
+        document.querySelector('#jspsych-survey-text-next').disabled = false;
+        clearInterval(interval);
+      }
+    }, 250)
+  },
+  randomize_order: true,
+  trial_duration: 5000  
+};
+
+var recall_mainplot = {
+  type: 'survey-text',
+  questions: [
+    {prompt: recall_mainplot_instructions, rows: 20, columns: 100}, 
+  ],
+  data: {'character':'Charles', 'coherence': 'mainplot','lag':'mainplot', 'plot': 'mainplot'},
+  // preamble:,
+  button_label:'Continue',
+  
+  on_load: function(){
+    var wait_time = 1 * 6 * 60000; // in milliseconds
+    var start_time = performance.now();
+    document.querySelector('#jspsych-survey-text-next').disabled = true;
+    var interval = setInterval(function(){
+      var time_left = wait_time - (performance.now() - start_time);
+      var minutes = Math.floor(time_left / 1000 / 60);
+      var seconds = Math.floor((time_left - minutes*1000*60)/1000);
+      var seconds_str = seconds.toString().padStart(2,'0');
+      document.querySelector('#clock').innerHTML = minutes + ':' + seconds_str
+      if(time_left <= 0){
+        document.querySelector('#clock').innerHTML = "0:00";
+        document.querySelector('#jspsych-survey-text-next').disabled = false;
+        clearInterval(interval);
+      }
+    }, 250)
+  }
+}; 
+
+// event distance
+  // event_distance_training_instructions
+var event_distance_test_instructions0 = {
+  type: "html-keyboard-response",
+  stimulus: event_distance_test_instructions0,
+  choices: [' ']
+}; 
+
+var event_distance_test_instructions1 = {
+  type: "html-keyboard-response",
+  stimulus: event_distance_test_instructions1,
+  choices: [' ']
+}; 
+
+  // event_distance_training
+var event_distance_training1 = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles1A1.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2E8.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: event_distance_test_instructions,
+    slider_start: 71, 
+    require_movement: false,
+    slider_width: 900
+};
+
+var event_distance_training1_answer = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles1A1.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2E8.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: '<p>Above is the CORRECT ANSWER.</p>',
+    slider_start: 144, 
+    require_movement: false,
+    slider_width: 900
+};
+
+var event_distance_training2 = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles2E6.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2E8.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: event_distance_test_instructions,
+    slider_start: 71, 
+    require_movement: true,
+    slider_width: 900,
+    trial_duration: 10000
+};
+
+var event_distance_training2_answer = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles2E6.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2E8.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: '<p>Above is the CORRECT ANSWER.</p>',
+    slider_start: 1, 
+    require_movement: false,
+    slider_width: 900
+};
+
+var event_distance_training3 = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles1A1.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2D4.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: event_distance_test_instructions,
+    slider_start: 71, 
+    require_movement: true,
+    slider_width: 900,
+    trial_duration: 10000
+};
+
+var event_distance_training3_answer = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles1A1.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2D4.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: '<p>Above is the CORRECT ANSWER.</p>',
+    slider_start: 122, 
+    require_movement: false,
+    slider_width: 900
+};
+
+var event_distance_training4 = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles1E7.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2B5.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: event_distance_test_instructions,
+    slider_start: 71, 
+    require_movement: true,
+    slider_width: 900,
+    trial_duration: 10000
+};
+
+var event_distance_training4_answer = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles1E7.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2B5.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: '<p>Above is the CORRECT ANSWER.</p>',
+    slider_start: 21, 
+    require_movement: false,
+    slider_width: 900
+};
+
+var event_distance_training5 = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles1E7.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2A2.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: event_distance_test_instructions,
+    slider_start: 71, 
+    require_movement: true,
+    slider_width: 900,
+    trial_duration: 10000
+};
+
+var event_distance_training5_answer = {
+    type: 'html-slider-response-fix',
+    stimulus: '<p>EXAMPLE:</p><img src="jspsych/stimuli/charles1E7.png" width="480" height="270"> &nbsp <img src="jspsych/stimuli/charles2A2.png" width="480" height="270">',
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: '<p>Above is the CORRECT ANSWER.</p>',
+    slider_start: 2, 
+    require_movement: false,
+    slider_width: 900
+};
+
+  // event_distance_test
+  var event_distance_test = {
+timeline: [
+  {
+    type: 'html-slider-response-fix',
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    labels: ['0<br>Very Close', '142<br>Very Far'],
+    min: 0, 
+    max: 142,
+    prompt: event_distance_test_instructions,
+    // stimulus_width: 300,
+    // stimulus_height: 168.75,
+    slider_start: 72, 
+    require_movement: true,
+    slider_width: 900,
+    data: {'character_1':jsPsych.timelineVariable('character_1'), 'act_1': jsPsych.timelineVariable('act_1'), 'event_1':jsPsych.timelineVariable('event_1'), 'image_1':jsPsych.timelineVariable('image_1'), 'postition_1':jsPsych.timelineVariable('position_1'),
+    'character_2':jsPsych.timelineVariable('character_2'), 'act_2': jsPsych.timelineVariable('act_2'), 'event_2':jsPsych.timelineVariable('event_2'), 'image_2':jsPsych.timelineVariable('image_2'), 'postition_2':jsPsych.timelineVariable('position_2'), 
+    'distance':jsPsych.timelineVariable('distance'), 'coherence': jsPsych.timelineVariable('coherence'),'lag':jsPsych.timelineVariable('lag'), 'condition': jsPsych.timelineVariable('condition')}
+  }
+  ], 
+  timeline_variables: event_distance_stim,
+  randomize_order: true,
+  trial_duration: 10000
+};
+
+// event distance
+  // event_distance_training_instructions
+  var event_distance_test_instructions2 = {
+  type: "html-keyboard-response",
+  stimulus: event_distance_test_instructions2,
+  choices: [' ']
+}; 
+
+// event distance
+  // event_distance_training_instructions
+  var event_distance_test_instructions3 = {
+  type: "html-keyboard-response",
+  stimulus: event_distance_test_instructions3,
+  choices: [' ']
+}; 
+
+
+// post_experiment_questions
+var difficulty_scale = [
+  "Very Easy", 
+  "Easy", 
+  "Neutral", 
+  "Difficult", 
+  "Very Difficult"
+];
+
+var agreeability_scale = [
+  "Strongly Disagree", 
+  "Disagree", 
+  "Neutral", 
+  "Agree", 
+  "Strongly Agree"
+];
+
+var post_experiment_questions1 = {
+  type: 'survey-likert',
+  questions: [
+    // {prompt: "Rate the difficulty of the task that asked you to recall everything that you can remember about the characters (character recall task).", name: 'recall_difficulty', labels: difficulty_scale},
+    {prompt: "Rate the difficulty of the task that asked you to estimate the distance between the two images (event distance task).", name: 'timeline_task_difficulty', labels: difficulty_scale},
+    {prompt: "The instructions were very clear.", name: 'instructions_rating', labels: agreeability_scale},
+    {prompt: "I felt engaged in throughout the experiment.", name: 'engagement_rating', labels: agreeability_scale}
+  ],
+  randomize_question_order: true
+};
+
+
+var post_experiment_questions2 = {
+  type: 'survey-text',
+  questions: [
+    // {prompt: "Post-Experiment Questionnaire<p><br></p> For the character recall task, what specific strategies did you use? Please explain.", rows: 6, columns: 120}, 
+    {prompt: "For the event distance task, what specific strategies did you use? Please explain.", rows: 6, columns: 120},
+    {prompt: "What did you notice about the order of characters? Please explain.", rows: 6, columns: 120},
+    {prompt: "Which character(s) did you find MOST interesting? Why? Please explain", rows: 6, columns: 120},
+    {prompt: "Which character(s) did you find LEAST interesting? Why? Please explain.", rows: 6, columns: 120},
+    {prompt: "Additional comments or suggestions.", rows: 6, columns: 120},
+  ],
+};
+
+
+// debriefing
+var debriefing = {
+  type: "html-keyboard-response",
+  stimulus: debriefing,
+  choices: [' '],
+  response_ends_trial: true
+}; 
+
+// experiment end
+var end = {
+  type: "html-keyboard-response",
+  stimulus: end_day2,
+  choices: [' '],
+  response_ends_trial: true
+};
+
+jsPsych.init({
+  data: {subject:subject, version:version},
+  timeline: [
+    welcome,
+    recall_instructions,
+    recall_sideplots,
+    recall_mainplot,
+    notification,
+    event_distance_test_instructions0, 
+    event_distance_test_instructions1, 
+    event_distance_training1,
+    event_distance_training1_answer,
+    event_distance_test_instructions2, 
+    event_distance_training2,
+    event_distance_training2_answer,
+    event_distance_training3,
+    event_distance_training3_answer,
+    event_distance_training4,
+    event_distance_training4_answer,
+    event_distance_training5,
+    event_distance_training5_answer,
+    notification,
+    event_distance_test_instructions3, 
+    event_distance_test,
+    post_experiment_questions1,
+    post_experiment_questions2,
+    debriefing,
+    end
+  ],
+  on_finish: function () {
+      jsPsych.data.addProperties({subject: subject, version: version});
+      var file_name = 'sub-' + subject + '_version-' + version + '_day-2_kramer2.0_pilotB5.csv';
+      jsPsych.data.get().localSave('csv',file_name);
+  }
+}
+);
+
+    </script>
+</html>

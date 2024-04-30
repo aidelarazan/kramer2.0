@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>kramer2.0_pilotC2_day2</title>
+        <script src="jspsych/jspsych.js"></script>
+        <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-text.js"></script>
+        <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-video-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-html-button-response.js"></script>
+        <script src="jspsych/plugins/jspsych-call-function.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-likert.js"></script>
+        <script src="jspsych/plugins/jspsych-html-slider-response-fix.js"></script>
+        <script src="jspsych/external/instructions.js"></script>
+        <script src="jspsych/external/event_distance_stim.js"></script>
+        <script src="jspsych/external/event_distance_training.js"></script>
+        <script src="jspsych/external/character_familiarization_test_stim.js"></script>
+        <script src="jspsych/external/free_recall_stim.js"></script>
+        <script src="jspsych/external/event_comparison_test_stim.js"></script>
+        <link href="jspsych/css/jspsych.css" rel="stylesheet" type="text/css">
+    </head>
+    <body></body>
+    <script>
+
+// kramer2.0_pilotC2 Day 2 (Retrieval Only)
+// Angelique I. Delarazan 11/09/2021
+//  Updated: 02/24/2022 added event_comparision_task
+
+// set subject ID and version number in the URL
+var subject = jsPsych.data.getURLVariable('subject')
+var version = jsPsych.data.getURLVariable('version')
+
+// initiate correct story recall version
+recall_stim_list = [
+  recall_version1, 
+  recall_version2, 
+  recall_version3, 
+  recall_version4, 
+  recall_version5, 
+  recall_version6, 
+  recall_version7, 
+  recall_version8, 
+  recall_version9, 
+  recall_version10, 
+  recall_version11, 
+  recall_version12, 
+  recall_version13, 
+  recall_version14,
+  recall_version15, 
+  recall_version16, 
+  recall_version17, 
+  recall_version18, 
+  recall_version19, 
+  recall_version20,
+  recall_version21, 
+  recall_version22, 
+  recall_version23, 
+  recall_version24, 
+  recall_version25, 
+  recall_version26,
+  recall_version27, 
+  recall_version28, 
+  recall_version29, 
+  recall_version30, 
+  recall_version31, 
+  recall_version32
+]
+var recall_stim = recall_stim_list[version-1] 
+
+// initiate correct story version
+event_comparison_stim_list = [
+  event_comparison_version1, 
+  event_comparison_version2, 
+  event_comparison_version3, 
+  event_comparison_version4, 
+  event_comparison_version5, 
+  event_comparison_version6, 
+  event_comparison_version7, 
+  event_comparison_version8, 
+  event_comparison_version9, 
+  event_comparison_version10, 
+  event_comparison_version11, 
+  event_comparison_version12, 
+  event_comparison_version13, 
+  event_comparison_version14,
+  event_comparison_version15, 
+  event_comparison_version16, 
+  event_comparison_version17, 
+  event_comparison_version18, 
+  event_comparison_version19, 
+  event_comparison_version20,
+  event_comparison_version21, 
+  event_comparison_version22, 
+  event_comparison_version23, 
+  event_comparison_version24, 
+  event_comparison_version25, 
+  event_comparison_version26,
+  event_comparison_version27, 
+  event_comparison_version28, 
+  event_comparison_version29, 
+  event_comparison_version30, 
+  event_comparison_version31, 
+  event_comparison_version32
+]
+var event_comparison_stim = event_comparison_stim_list[version-1] 
+
+// experimenter notification
+var notification = {
+  type: "html-keyboard-response",
+  stimulus: notification,
+  choices: [' '],
+  response_ends_trial: true
+};
+
+//  welcome message
+var welcome = {
+  type: "html-keyboard-response",
+  stimulus: welcome_day2,
+  choices: [' '],
+  response_ends_trial: true
+}; 
+
+// recall
+//   free_recall_instructions
+var free_recall_instructions = {
+  type: "html-keyboard-response",
+  stimulus: free_recall_instructions,
+  choices: [' ']
+};
+
+// free_recall
+var free_recall = {
+  timeline: [{
+  type: 'survey-text',
+  questions: [
+    {prompt: free_recall_instructions1, rows: 20, columns: 100}, 
+  ],
+  data: {'version':jsPsych.timelineVariable('version'),'scene1':jsPsych.timelineVariable('scene1'),'scene2':jsPsych.timelineVariable('scene2'),'scene3':jsPsych.timelineVariable('scene3'),'scene4':jsPsych.timelineVariable('scene4'),'scene5':jsPsych.timelineVariable('scene5'),'scene6':jsPsych.timelineVariable('scene6'),'scene7':jsPsych.timelineVariable('scene7'),'scene8':jsPsych.timelineVariable('scene8'),'scene9':jsPsych.timelineVariable('scene9'),
+  'scene10':jsPsych.timelineVariable('scene10'),'scene11':jsPsych.timelineVariable('scene11'),'scene12':jsPsych.timelineVariable('scene12'),'scene13':jsPsych.timelineVariable('scene13'),'scene14':jsPsych.timelineVariable('scene14'),'scene15':jsPsych.timelineVariable('scene15'),'scene16':jsPsych.timelineVariable('scene16'),'scene17':jsPsych.timelineVariable('scene17'),'scene18':jsPsych.timelineVariable('scene18')},
+  button_label:'Continue',
+  
+  on_load: function(){
+    var wait_time = 1 * 15 * 60000; // in milliseconds
+    var start_time = performance.now();
+    document.querySelector('#jspsych-survey-text-next').disabled = true;
+    var interval = setInterval(function(){
+      var time_left = wait_time - (performance.now() - start_time);
+      var minutes = Math.floor(time_left / 1000 / 60);
+      var seconds = Math.floor((time_left - minutes*1000*60)/1000);
+      var seconds_str = seconds.toString().padStart(2,'0');
+      document.querySelector('#clock').innerHTML = minutes + ':' + seconds_str
+      if(time_left <= 0){
+        document.querySelector('#clock').innerHTML = "0:00";
+        document.querySelector('#jspsych-survey-text-next').disabled = false;
+        clearInterval(interval);
+      }
+    }, 250)
+  }
+}], timeline_variables: recall_stim,
+}; 
+
+// event_comparison
+//   event_comparison_instructions
+var event_comparison_instructions0 = {
+  type: "html-keyboard-response",
+  stimulus: event_comparison_test_instructions0,
+  choices: [' ']
+};
+
+var event_comparison_instructions1 = {
+  type: "html-keyboard-response",
+  stimulus: event_comparison_test_instructions1,
+  choices: [' ']
+};
+
+var event_comparison_instructions2 = {
+  type: "html-keyboard-response",
+  stimulus: event_comparison_test_instructions2,
+  choices: [' ']
+};
+
+// example
+var event_comparison_example = {
+  timeline: [{
+    // fixation cross 
+    type: 'html-keyboard-response',
+    stimulus: '<div style="font-size:60px;">+</div>',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 1000,
+    response_ends_trial: false
+  },
+  {
+    // characters' names, faces, and question
+    type: 'html-button-response',
+    // prompt: '<div style="font-size:18px;"><p>Which pairs are occured closer together in time?</p></div>',
+    stimulus: function(){
+        var html=jsPsych.timelineVariable('stim', true);
+        html += "<p>"+jsPsych.timelineVariable('question', true)+"</p>";
+        return html;
+    },
+    choices: ['Pair A', 'Pair B'],
+    trial_duration: 15000,
+    data: {'stim':jsPsych.timelineVariable('stim'),'question':jsPsych.timelineVariable('question'),}
+}
+  ],
+    timeline_variables: event_comparison_example_test,
+    randomize_order: true
+};
+
+// comparison task
+var event_comparison_test = {
+  timeline: [{
+    // fixation cross 
+    type: 'html-keyboard-response',
+    stimulus: '<div style="font-size:60px;">+</div>',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 1000,
+    response_ends_trial: false
+  },
+  {
+    // characters' names, faces, and question
+    type: 'html-button-response',
+    // prompt: '<div style="font-size:18px;"><p>Which pairs are occured closer together in time?</p></div>',
+    stimulus: function(){
+        var html=jsPsych.timelineVariable('stim', true);
+        html += "<p>"+jsPsych.timelineVariable('question', true)+"</p>";
+        return html;
+    },
+    choices: ['Pair A', 'Pair B'],
+    trial_duration: 15000,
+    data: {'pairA_character':jsPsych.timelineVariable('pairA_character'),'pairA_act1':jsPsych.timelineVariable('pairA_act1'),'pairA_scene1':jsPsych.timelineVariable('pairA_scene1'),'pairA_event1':jsPsych.timelineVariable('pairA_event1'),'pairA_image1':jsPsych.timelineVariable('pairA_image1'),'pairA_position1':jsPsych.timelineVariable('pairA_position1'),
+    'pairA_act2':jsPsych.timelineVariable('pairA_act2'),'pairA_scene2':jsPsych.timelineVariable('pairA_scene2'),'pairA_event2':jsPsych.timelineVariable('pairA_event2'),'pairA_image2':jsPsych.timelineVariable('pairA_image2'),'pairA_position2':jsPsych.timelineVariable('pairA_position2'),'pairA_coherence':jsPsych.timelineVariable('pairA_coherence'),'pairA_lag':jsPsych.timelineVariable('pairA_lag'),'pairA_distance':jsPsych.timelineVariable('pairA_distance'),
+    'pairB_character':jsPsych.timelineVariable('pairB_character'),'pairB_act1':jsPsych.timelineVariable('pairB_act1'),'pairB_scene1':jsPsych.timelineVariable('pairB_scene1'),'pairB_event1':jsPsych.timelineVariable('pairB_event1'),'pairB_image1':jsPsych.timelineVariable('pairB_image1'),'pairB_position1':jsPsych.timelineVariable('pairB_position1'),
+    'pairB_act2':jsPsych.timelineVariable('pairB_act2'),'pairB_scene2':jsPsych.timelineVariable('pairB_scene2'),'pairB_event2':jsPsych.timelineVariable('pairB_event2'),'pairB_image2':jsPsych.timelineVariable('pairB_image2'),'pairB_position2':jsPsych.timelineVariable('pairB_position2'),'pairB_coherence':jsPsych.timelineVariable('pairB_coherence'),'pairB_lag':jsPsych.timelineVariable('pairB_lag'),'pairB_distance':jsPsych.timelineVariable('pairB_distance'),
+    'stim':jsPsych.timelineVariable('stim'),'question':jsPsych.timelineVariable('question'),}
+}
+  ],
+    timeline_variables: event_comparison_stim,
+    randomize_order: true
+};
+
+// post_experiment_questions
+var difficulty_scale = [
+  "Very Easy", 
+  "Easy", 
+  "Neutral", 
+  "Difficult", 
+  "Very Difficult"
+];
+
+var agreeability_scale = [
+  "Strongly Disagree", 
+  "Disagree", 
+  "Neutral", 
+  "Agree", 
+  "Strongly Agree"
+];
+
+var post_experiment_questions1 = {
+  type: 'survey-likert',
+  questions: [
+    {prompt: "Rate the difficulty of the task that asked you to recall everything about the stories.", name: 'recall_difficulty', labels: difficulty_scale},
+    {prompt: "Rate the difficulty of the task that asked you to determine which pairs of events occured closer together in time (event comparison task).", name: 'event_comparison_difficulty', labels: difficulty_scale},
+    {prompt: "The instructions were very clear.", name: 'instructions_rating', labels: agreeability_scale},
+    {prompt: "I felt engaged in throughout the experiment.", name: 'engagement_rating', labels: agreeability_scale}
+  ],
+  randomize_question_order: true
+};
+
+
+var post_experiment_questions2 = {
+  type: 'survey-text',
+  questions: [
+    {prompt: "Post-Experiment Questionnaire<p><br></p> For the recall task, what specific strategies did you use? Please explain.", rows: 6, columns: 120},
+    {prompt: "For the recall task, how did you structure your recall? Please explain.", rows: 6, columns: 120}, 
+    {prompt: "For the event comparision task, what specific strategies did you use? Please explain.", rows: 6, columns: 120},
+    {prompt: "What did you notice about the order of characters? Please explain.", rows: 6, columns: 120},
+    {prompt: "Which character(s) did you find MOST interesting? Why? Please explain", rows: 6, columns: 120},
+    {prompt: "Which character(s) did you find LEAST interesting? Why? Please explain.", rows: 6, columns: 120},
+    {prompt: "Additional comments or suggestions.", rows: 6, columns: 120},
+  ],
+};
+
+
+// debriefing
+var debriefing = {
+  type: "html-keyboard-response",
+  stimulus: debriefing,
+  choices: [' '],
+  response_ends_trial: true
+}; 
+
+// experiment end
+var end = {
+  type: "html-keyboard-response",
+  stimulus: end_day2,
+  choices: [' '],
+  response_ends_trial: true
+};
+
+jsPsych.init({
+  data: {subject:subject, version:version},
+  timeline: [
+    welcome,
+    free_recall_instructions,
+    free_recall,
+    notification,
+    event_comparison_instructions0,
+    event_comparison_instructions1,
+    event_comparison_instructions2,
+    event_comparison_instructions1,
+    event_comparison_example,
+    event_comparison_instructions1,
+    event_comparison_test,
+    // notification,
+    post_experiment_questions1, 
+    post_experiment_questions2,
+    debriefing,
+    end
+  ],
+  on_finish: function () {
+      jsPsych.data.addProperties({subject: subject, version: version});
+      var file_name = 'sub-' + subject + '_version-' + version + '_day-2_kramer2.0_pilotC2.csv';
+      jsPsych.data.get().localSave('csv',file_name);
+  }
+}
+);
+
+    </script>
+</html>

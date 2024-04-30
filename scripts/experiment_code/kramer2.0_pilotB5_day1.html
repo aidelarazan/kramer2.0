@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>kramer2.0_pilotB5_day1</title>
+        <script src="jspsych/jspsych.js"></script>
+        <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-text.js"></script>
+        <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-video-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-html-button-response.js"></script>
+        <script src="jspsych/plugins/jspsych-call-function.js"></script>
+        <script src="jspsych/external/character_familiarization_test_stim.js"></script>
+        <script src="jspsych/external/instructions.js"></script>
+        <script src="jspsych/external/baseline_test_stim.js"></script>
+        <script src="jspsych/external/characters_stim.js"></script>
+        <script src="jspsych/external/story_stim.js"></script>
+        <link href="jspsych/css/jspsych.css" rel="stylesheet" type="text/css">
+    </head>
+    <body></body>
+    <script>
+
+// kramer2.0_pilotB5 Day 1 (Encoding Only)
+// Angelique I. Delarazan 09/25/2021
+
+// set subject ID and version number in the URL
+var subject = jsPsych.data.getURLVariable('subject')
+var version = jsPsych.data.getURLVariable('version')
+
+// initiate correct story version
+story_stim_list = [
+  story_version1, 
+  story_version2, 
+  story_version3, 
+  story_version4,
+  story_version5, 
+  story_version6, 
+  story_version7, 
+  story_version8, 
+  story_version9, 
+  story_version10, 
+  story_version11, 
+  story_version12, 
+  story_version13, 
+  story_version14,
+  story_version15, 
+  story_version16, 
+  story_version17, 
+  story_version18, 
+  story_version19, 
+  story_version20,
+  story_version21, 
+  story_version22, 
+  story_version23, 
+  story_version24, 
+  story_version25, 
+  story_version26,
+  story_version27, 
+  story_version28, 
+  story_version29, 
+  story_version30, 
+  story_version31, 
+  story_version32
+]
+var story_stim = story_stim_list[version-1] 
+
+// experimenter notification
+var notification = {
+  type: "html-keyboard-response",
+  stimulus: notification,
+  choices: [' '],
+  response_ends_trial: true
+};
+
+// introduction
+//  researcher set up
+var audio_check = {
+    type: 'html-button-response',
+    stimulus: audio_check,
+    choices: ['Yes, I have tested the audio.']
+};
+
+var consent_check = {
+  type: 'html-button-response',
+  stimulus: consent_check,
+  choices: ['Yes, I have done this.']
+};
+
+//  welcome message
+var welcome = {
+  type: "html-keyboard-response",
+  stimulus: welcome_day1,
+  choices: [' '],
+  response_ends_trial: true
+}; 
+
+// character familiarization task 
+//   instructions
+var character_familiarization_instructions = {
+  type: "html-keyboard-response",
+  stimulus: character_familiarization_instructions
+};
+
+//  character familiarization
+var character_familiarization = {
+    timeline: [
+        {
+            // fixation cross 
+            type: 'html-keyboard-response',
+            stimulus: '<div style="font-size:60px;">+</div>',
+            choices: jsPsych.NO_KEYS,
+            trial_duration: 1000,
+            response_ends_trial: false
+        },
+        {
+            // character names and faces
+            type: 'image-keyboard-response',
+            stimulus: jsPsych.timelineVariable('stim'),
+            prompt: jsPsych.timelineVariable('name'),
+            choices: jsPsych.NO_KEYS,
+            stimulus_width: 800, 
+            stimulus_height: 450,
+            trial_duration: 4000,
+            data: {'character': jsPsych.timelineVariable('character')}
+        }
+    ],
+    timeline_variables: characters_stim, 
+    randomize_order: true,
+    repetitions: 3
+};
+
+// character familiarization test
+//   instructions
+var character_familiarization_test_instructions = {
+  type: "html-keyboard-response",
+  stimulus: character_familiarization_test_instructions,
+  choices: [' ']
+};
+
+// familiarization test
+var character_familiarization_test = {
+  timeline: [{
+    // fixation cross 
+    type: 'html-keyboard-response',
+    stimulus: '<div style="font-size:60px;">+</div>',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 1000,
+    response_ends_trial: false
+  },
+  {
+    // characters' names, faces, and question
+    type: 'html-keyboard-response',
+    prompt: '<div style="font-size:18px;"><p>F = Correct&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; J = Incorrect</p></div>',
+    stimulus: function(){
+        var html=jsPsych.timelineVariable('stim', true);
+        html += "<p>"+jsPsych.timelineVariable('name', true)+"</p>";
+        return html;
+    },
+    choices: ['f','j'],
+    trial_duration: 4000,
+    data: {'character_name':jsPsych.timelineVariable('name'),'character_face':jsPsych.timelineVariable('face'),'correct_response':jsPsych.timelineVariable('correct_response')}
+}
+  ],
+    timeline_variables: character_familiarization_test_stim1, character_familiarization_test_stim2,
+    randomize_order: true
+};
+
+// story encoding //
+  //story encoding instructions
+  var story_encoding_instructions = {
+  type: "html-keyboard-response",
+  stimulus: story_encoding_instructions,
+  choices: [' '],
+  response_ends_trial: true
+}; 
+
+var story_encoding = {
+timeline: [
+  {
+    type: 'video-keyboard-response', 
+    stimulus: jsPsych.timelineVariable('video_stim'), 
+    choices: jsPsych.NO_KEYS,
+    trial_ends_after_video: true,
+    data: {'story_version':jsPsych.timelineVariable('story_version'),'character':jsPsych.timelineVariable('character'), 'act':jsPsych.timelineVariable('act'), 'event':jsPsych.timelineVariable('event'), 'coherence':jsPsych.timelineVariable('coherence'), 'lag':jsPsych.timelineVariable('lag'), 'plot':jsPsych.timelineVariable('plot')}
+  }, 
+  {
+    type: 'html-keyboard-response', 
+    stimulus: '<div style="font-size:60px;">+</div>',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 5000
+  }
+  ],
+  timeline_variables: story_stim
+}
+// experiment end
+var end = {
+  type: "html-keyboard-response",
+  stimulus: end_day1,
+  choices: [' '],
+  response_ends_trial: true
+};
+
+var version_check = {
+  type: "html-keyboard-response",
+  stimulus: "<p>Subject " + subject + " was randomly assigned Version: "+ version,
+  prompt: "<p><br></p>Press Spacebar to Exit.</p>",
+  choices: [' '],
+};
+
+jsPsych.init({
+  data: {subject:subject, version:version},
+  timeline: [
+    audio_check, 
+    consent_check,
+    welcome,
+    character_familiarization_instructions,
+    character_familiarization,
+    character_familiarization_test_instructions, 
+    character_familiarization_test,
+    notification,
+    story_encoding_instructions,
+    story_encoding,
+    end,
+    version_check
+  ],
+  on_finish: function () {
+      jsPsych.data.addProperties({subject: subject, version: version});
+      var file_name = 'sub-' + subject + '_version-' + version + '_day-1_kramer2.0_pilotB5.csv';
+      jsPsych.data.get().localSave('csv',file_name);
+  }
+}
+);
+
+    </script>
+</html>
